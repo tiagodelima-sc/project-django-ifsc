@@ -21,6 +21,6 @@ class Task(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     
-    #Retornar nome da tarefa no admin
+    #Retornar nome da tarefa no BD
     def __str__(self):
       return self.title

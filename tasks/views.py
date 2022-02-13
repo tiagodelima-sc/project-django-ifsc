@@ -8,15 +8,25 @@ from .models import Task
 # Create your views here.
 
 def taskList(request):
-    #Pegando todo os objetos do BD
-    tasks_list = Task.objects.all().order_by('-create_at')
+    #função do search
     
-    paginator = Paginator(tasks_list, 5)
-    page = request.GET.get('page')
-    tasks = paginator.get_page(page)
+    search = request.GET.get('search')
+    
+    if search:
+        
+        tasks = Task.objects.filter(title__icontains=search)
+    
+    else:
+         #Pegando todo os objetos do BD
+        tasks_list = Task.objects.all().order_by('-create_at')
+    
+        paginator = Paginator(tasks_list, 5)
+        page = request.GET.get('page')
+        tasks = paginator.get_page(page)
     
     #Colocando as tarefas no template, os valores que resgatei no BD
     return render(request, 'tasks/list.html', {'tasks': tasks})
+    
 
 def taskView(request, id):
     task = get_object_or_404(Task, pk=id)

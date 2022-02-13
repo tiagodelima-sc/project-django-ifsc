@@ -16,11 +16,11 @@ def taskList(request):
     
     if search:
         
-        tasks = Task.objects.filter(title__icontains=search)
+        tasks = Task.objects.filter(title__icontains=search, user=request.user)
     
     else:
          #Pegando todo os objetos do BD
-        tasks_list = Task.objects.all().order_by('-create_at')
+        tasks_list = Task.objects.all().order_by('-create_at').filter(user=request.user)
     
         paginator = Paginator(tasks_list, 5)
         page = request.GET.get('page')
@@ -42,6 +42,8 @@ def newTask(request):
         if form.is_valid():
             task = form.save(commit=False)
             task.done = 'doing'
+            #alteração para criar a tarefa para cada usuario
+            task.user = request.user
             task.save()
             return redirect('/')
     else:

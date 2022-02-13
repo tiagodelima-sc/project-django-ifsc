@@ -49,6 +49,10 @@
   display: inline-block;
 }
 
+#add-link {
+  text-decoration: none;
+}
+
 /*Estilização do List*/
 
 .list-div {

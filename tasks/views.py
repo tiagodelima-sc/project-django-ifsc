@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from .forms import TaskForm
 from django.contrib import messages
@@ -8,7 +9,12 @@ from .models import Task
 
 def taskList(request):
     #Pegando todo os objetos do BD
-    tasks = Task.objects.all().order_by('-create_at')
+    tasks_list = Task.objects.all().order_by('-create_at')
+    
+    paginator = Paginator(tasks_list, 5)
+    page = request.GET.get('page')
+    tasks = paginator.get_page(page)
+    
     #Colocando as tarefas no template, os valores que resgatei no BD
     return render(request, 'tasks/list.html', {'tasks': tasks})
 
